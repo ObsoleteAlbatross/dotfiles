@@ -1,0 +1,3 @@
+#!/bin/sh
+# echo "[mem $(free | awk '/Mem/ {printf "%dM/%dM\n", $3 / 1024.0, $2 / 1024.0 }')]"
+echo "[mem $(free --mebi | awk 'FNR==2{printf ("%2.2fGiB/%2.2fGiB\n", ( $3 / 1024), ($2 / 1024))}')]"

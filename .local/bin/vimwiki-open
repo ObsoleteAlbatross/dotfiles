@@ -1,0 +1,11 @@
+#!/bin/sh
+
+path=$(readlink -f "$1")
+base=${path%.*}
+rel=${base##*/vimwiki/}.pdf
+dir=${path%%vimwiki/*}pdf/
+outpath="$dir$rel"
+outdir=${outpath%/*}
+
+[ -f "$outpath" ] || vimwiki-compile "$path"
+setsid -f "$READER" "$outpath"

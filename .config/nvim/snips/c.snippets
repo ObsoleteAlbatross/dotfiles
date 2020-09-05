@@ -1,0 +1,137 @@
+priority -50
+
+snippet header "file header" b
+/**
+* @file			`!p snip.rv = snip.fn`
+* @author		Chares Yan
+* @created		`date +%d/%m/%y`
+* @description	${1:${VISUAL}}
+**/
+endsnippet
+
+snippet main "main() (main)"
+int main(${1:int argc, char *argv[]})
+{
+	${VISUAL}$0
+	return 0;
+}
+endsnippet
+
+snippet inc "#inclde <...>"
+#include <${1:stdio.h}>
+endsnippet
+
+snippet Inc "#include '...'"
+#include "$1.h"
+endsnippet
+
+snippet #def "#define ..."
+#define $1
+endsnippet
+
+snippet #ifndef "#ifndef ... #define ... #endif"
+#ifndef $1
+#define $1
+$0
+#endif /* ifndef $1 */
+endsnippet
+
+snippet #if "#if ... #endif"
+#if ${1:0}
+${VISUAL}$0
+#endif
+endsnippet
+
+snippet for "for loop"
+for ($1) {
+	${VISUAL}$0
+}
+endsnippet
+
+snippet while "while loop"
+while (${1:/* cond */}) {
+	${0:${VISUAL}}
+}
+endsnippet
+
+snippet do "do-while loop"
+do {
+	${0:${VISUAL}}
+} while (${1:/* cond */});
+endsnippet
+
+snippet if "if (cond){...}"
+if (${1:/* cond */}) {
+	${VISUAL}$0
+}
+endsnippet
+
+snippet ifi "if (cond) ...;"
+if (${1:/* cond */}) $0;
+endsnippet
+
+snippet ife "if-else"
+if (${1:/* cond */}) {
+	${2:${VISUAL}}
+} else {
+	$0
+}
+endsnippet
+
+snippet elif "elif (cond)"
+else if(${1:/* cond */}) {
+	${VISUAL}$0
+}
+endsnippet
+
+snippet else "else"
+else {
+	${VISUAL}$0
+}
+endsnippet
+
+snippet t "ternary"
+${1:/* cond */} ? ${2:true} : ${3:false}
+endsnippet
+
+snippet dfun "dfun"
+/*
+* @brief ${4:brief}
+* @param ${5:param}
+* @return ${6:return}
+*/
+${1:return_type} ${2:fun_name}(${3:param})
+{
+	${0:func_body}
+}
+endsnippet
+
+snippet fun "fun"
+${1:return_type} ${2:fun_name}(${3:param})
+{
+	${0:func_body}
+}
+endsnippet
+
+snippet fund "fun def"
+/*
+* @brief ${4:brief}
+* @param ${5:param}
+* @return ${6:return}
+*/
+${1:return_type} ${2:fun_name}(${3:param});
+endsnippet
+
+snippet consd "cons def" b
+/*
+* @brief ${3:brief}
+* @param ${4:param}
+*/
+${1:cons_name}(${2:param});
+endsnippet
+
+snippet todo "todo"
+/*
+* @todo ${1:todo desc}
+*/
+endsnippet

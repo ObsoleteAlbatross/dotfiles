@@ -1,0 +1,5 @@
+#!/bin/sh
+cap_full=`amixer get Capture`
+cap_level=`echo $cap_full | awk -F'[][]' 'END{ print $2 }'`
+echo $cap_full | grep "\[on\]" > /dev/null 2>&1 && cap_indicator="+" || cap_indicator="-"
+echo "[mic $cap_indicator$cap_level]"

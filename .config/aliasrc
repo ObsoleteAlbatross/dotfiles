@@ -1,0 +1,51 @@
+#!/bin/sh
+
+alias grep='grep --color=auto' # color grep
+
+alias df='df -h'        # human readable
+alias free='free -h'    # human readable
+
+alias shutdown='sudo shutdown -h now'
+alias reboot='sudo reboot'
+
+alias xrdb-merge='xrdb -merge ~/.Xresources'
+
+# change directory
+alias ..='cd ..'
+alias .2='cd ../..'
+alias .3='cd ../../..'
+alias .4='cd ../../../..'
+alias .5='cd ../../../../..'
+# change ls to exa
+alias ls='exa -al --color=always --group-directories-first'
+alias lt='exa -aT --color=always --group-directories-first'
+alias l.='exa -a | grep "^\."'
+
+alias vim='nvim'
+alias v='vim'
+alias notes='vim $HOME/.local/share/notes/vimwiki/index.wiki'
+
+# recursive
+alias rm='rm -r'
+alias cp='cp -ri' # confirm before overwrite
+
+# youtube download
+alias yt='youtube-dl --add-metadata -i'
+alias yta='yt -x -f bestaudio/best -o "/home/zoomer/.local/share/music/%(title)s.%(ext)s"'
+
+# xbps
+alias xi='sudo xbps-install'
+alias xr='sudo xbps-remove -R'
+alias xq='xbps-query'
+
+# better default options
+alias speedtest-cli='speedtest-cli --secure --bytes'
+
+# sxiv open entire directory and devour
+alias sxiv='devour sxiv_rifle'
+
+# latex update
+alias tex-update='sudo tlmgr update --all'
+
+# carry aliases to root and reset timeout
+alias sudo='sudo -v; sudo '

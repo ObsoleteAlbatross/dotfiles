@@ -1,0 +1,11 @@
+#!/bin/sh
+
+path=$(readlink -f "$1")
+base=${path%.*}
+rel=${base##*/vimwiki/}.pdf
+dir=${path%%vimwiki/*}pdf/
+outpath="$dir$rel"
+outdir=${outpath%/*}
+
+mkdir -p "$outdir"
+pandoc -s "$path" -f vimwiki -t pdf -o "$outpath" -V geometry:"top=0.75in, bottom=0.75in, left=1in, right=1in"

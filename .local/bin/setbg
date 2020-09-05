@@ -1,0 +1,5 @@
+#!/bin/sh
+
+bg_location="${XDG_CACHE_HOME:-$HOME/.cache/}/bg"
+[ -f "$1" ] && ln -sf "$(readlink -f "$1")" "$bg_location"
+xwallpaper --zoom "$bg_location"

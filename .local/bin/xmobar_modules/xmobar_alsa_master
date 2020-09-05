@@ -1,0 +1,5 @@
+#!/bin/sh
+vol_full=`amixer get Master`
+vol_level=`echo $vol_full | awk -F'[][]' 'END{ print $2 }'`
+echo $vol_full | grep "\[on\]" > /dev/null 2>&1 && vol_indicator="+" || vol_indicator="-"
+echo "[vol $vol_indicator$vol_level]"

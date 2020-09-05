@@ -1,0 +1,5 @@
+#!/bin/sh
+
+ss_path="$HOME/pictures/screenshots/$(date +%s).png"
+maim -s "$ss_path"
+xclip -selection clipboard -t image/png < "$ss_path"

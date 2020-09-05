@@ -1,0 +1,106 @@
+priority -50
+extends c
+priority -49
+
+snippet pri "private"
+private
+endsnippet
+
+snippet pro "protected"
+protected
+endsnippet
+
+snippet pub "public"
+public
+endsnippet
+
+snippet fr "friend"
+friend
+endsnippet
+
+snippet mu "mutable"
+mutable
+endsnippet
+
+snippet class "class .. (class)"
+class ${1:class_name}
+{
+	public:
+		$1 (${2:param});
+
+	private:
+		${0:/* data */}
+};
+endsnippet
+
+snippet ns "namespace .. (namespace)"
+namespace${1/.+/ /m}$1
+{
+	${VISUAL}$0
+}${1/.+/ \/* /m}namespace $1${1/.+/ *\/ /m}
+endsnippet
+
+snippet genh "generate .h"
+#ifndef $2_H
+#define $2_H
+
+namespace ${3:namespace} {
+	class ${1:class_name}
+	{
+		public:
+			/*
+			* @brief ${4:brief}
+			*/
+			$1();
+			$0
+
+		private:
+			${5:/* data */}
+	};
+}
+
+#endif /* $2_H */
+endsnippet
+
+snippet dmfun "dmem fun"
+/*
+* @brief ${4:brief}
+* @param ${5:param}
+* @return ${6:return}
+*/
+${1:return_type} ${2:class}::${3:member_fun}(${4:param})
+{
+	${0:func_boddy}
+}
+endsnippet
+
+snippet mfun "mem fun"
+${1:return_type} ${2:class}::${3:member_fun}(${4:param})
+{
+	${0:func_boddy}
+}
+endsnippet
+
+snippet try "try catch"
+try {
+	$1
+} catch ($2) {
+	$3
+}
+endsnippet
+
+snippet cout "cout"
+std::cout << ${1} << std::endl;
+endsnippet
+
+snippet cin "cin"
+std::cin >> ${1};
+endsnippet
+
+snippet vd "var dec"
+${1:type} ${2:name}; /* ${3:desc} */
+endsnippet
+
+snippet param "@param"
+@param $1
+endsnippet

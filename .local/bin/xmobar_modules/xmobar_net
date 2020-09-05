@@ -1,0 +1,15 @@
+#!/bin/sh
+
+SLEEP_SEC=5
+
+cache=/home/zoomer/.cache/netlog
+prevdata="$(cat "$cache")"
+
+rxcurrent="$(($(cat /sys/class/net/[ew]*/statistics/rx_bytes | paste -sd '+')))"
+txcurrent="$(($(cat /sys/class/net/[ew]*/statistics/tx_bytes | paste -sd '+')))"
+
+echo "$rxcurrent $txcurrent" > "$cache"
+
+echo "[net" \
+     "$(((rxcurrent-${prevdata%% *})/1024/$SLEEP_SEC))KiB" \
+     "$(((txcurrent-${prevdata##* })/1024/$SLEEP_SEC))KiB]"
