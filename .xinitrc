@@ -16,7 +16,7 @@ setxkbmap -option caps:escape &
 xset r rate 300 50 &
 
 # file syncing
-syncthing &
+syncthing -no-browser &
 
 # wm
 # stack exec -- xmonad --recompile
