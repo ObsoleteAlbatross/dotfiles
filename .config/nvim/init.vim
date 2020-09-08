@@ -95,7 +95,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 autocmd InsertEnter * norm zz
 
 " compile suckless
-autocmd BufWritePost config.h,config.def.h !sudo make install
+autocmd BufWritePost config.h,config.def.h !make install
 
 " == ale ==
 let g:ale_disable_lsp=1 " needed before ale is loaded and to work with coc
