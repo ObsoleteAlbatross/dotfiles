@@ -5,7 +5,7 @@ filetype indent on
 set termguicolors
 set autoindent smartindent
 
-" set colorcolumn=81
+set colorcolumn=81
 highlight ColorColumn ctermbg=0 guibg=lightgrey
 
 set mouse=a
@@ -83,6 +83,9 @@ map <silent> <leader>h :w <bar> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,
 map <silent> <leader>c :!vimwiki-compile %<CR>
 map <silent> <leader>v :!vimwiki-open %<CR>
 
+" toggle conceal level between 0 and 2
+nnoremap <leader>z :let &cole=(&cole == 2) ? 0 : 2 <bar> echo 'conceallevel ' . &cole <CR>
+
 " === auto ===
 " on save remove trailing whitespace and newlines
 autocmd BufWritePre * %s/\s\+$//e
@@ -140,7 +143,7 @@ call plug#end()
 " === vimwiki ===
 let g:vimwiki_table_mappings=0
 let g:vimwiki_conceallevel=2
-let g:vimwiki_list=[{'path': '$HOME/.local/share/notes/vimwiki'}]
+let g:vimwiki_list=[{'path': '$HOME/notes/vimwiki'}]
 function! VimwikiLinkHandler(link)
   let link=a:link
   if link =~# '^vfile:'

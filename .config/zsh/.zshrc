@@ -1,4 +1,6 @@
 export FPATH=$FPATH:$HOME/.config/zsh/plugins:$HOME/.config/zsh/plugins/zsh-completions/src
+source "/usr/share/fzf/key-bindings.zsh"
+export FZF_DEFAULT_COMMAND='rg --files --hidden --follow'
 
 export PF_INFO="ascii title os kernel wm pkgs editor shell"
 pfetch
@@ -29,7 +31,3 @@ source "$HOME/.config/aliasrc"
 source "$HOME/.config/zsh/plugins/fsh/fast-syntax-highlighting.plugin.zsh"
 
 PS1=" > "
-
-export FZF_DEFAULT_COMMAND='rg --files --hidden --follow'
-
-alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
