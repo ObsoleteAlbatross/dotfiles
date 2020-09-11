@@ -39,10 +39,10 @@ alias xr='sudo xbps-remove -R'
 alias xq='xbps-query'
 
 # emerge
-alias emerge-install='sudo emerge -a --quiet-build --newuse'
+alias emerge-install='sudo emerge -a --quiet-build'
 alias emerge-install-unmask='emerge-install --autounmask-continue'
-alias emerge-update-all='sudo emerge -uDU --quiet-build --keep-going --with-bdeps=y @world && emerge-depclean'
-alias emerge-depclean='sudo emerge --update --newuse --deep @ world && sudo emerge -c'
+alias emerge-update-all='sudo emerge -uDU --quiet-build --keep-going --newuse --changed-use --with-bdeps=y @world && sudo haskell-updater && sudo perl-cleaner --all'
+alias emerge-depclean='sudo emerge --update --newuse --deep @world && sudo emerge --depclean'
 alias emerge-remove='sudo emerge -cav'
 alias emerge-force-remove='sudo emerge -C'
 
@@ -57,3 +57,5 @@ alias tex-update='sudo tlmgr update --all'
 
 # carry aliases to root and reset timeout
 alias sudo='sudo -v; sudo '
+
+alias startx='startx &> /dev/null'
