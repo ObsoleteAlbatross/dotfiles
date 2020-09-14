@@ -3,7 +3,8 @@ source "/usr/share/fzf/key-bindings.zsh"
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow'
 
 export PF_INFO="ascii title os kernel wm pkgs editor shell"
-pfetch
+# pfetch
+"$HOME"/src/ufetch/ufetch-gentoo
 
 autoload -U colors && colors
 stty stop undef
