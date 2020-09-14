@@ -1,0 +1,48 @@
+#!/bin/sh
+
+server_prompt() {
+    echo -e "\nSelect one of servers\
+    \n1) annacis.students.ubc.ca\
+    \n2) anvil.students.ubc.ca\
+    \n3) bowen.students.ubc.ca\
+    \n4) lulu.students.ubc.ca\
+    \n5) thetis.students.ubc.ca\
+    \n6) remote.students.ubc.ca"
+}
+
+server_select() {
+    case $1 in
+        1) echo "annacis" ;;
+        2) echo "anvil"   ;;
+        3) echo "bowen"   ;;
+        4) echo "lulu"    ;;
+        5) echo "thetis"  ;;
+        6) echo "remote"  ;;
+    esac
+}
+
+ssh_mode() {
+    server_prompt
+    read -n1 input
+    server=$(server_select $input)
+    echo -e "\nAllow X11 forwarding? [y/n]"
+    read -n1 x11
+    [ "$x11" == "y" ] && ssh -Y ${cwl}@${server}.students.cs.ubc.ca || ssh ${cwl}@${server}.students.cs.ubc.ca
+}
+
+sftp_mode() {
+    server_prompt
+    read -n1 input
+    server=$(server_select $input)
+    sftp ${cwl}@${server}.students.cs.ubc.ca
+}
+
+echo "Enter your cwl"
+read cwl
+
+echo -e "Mode\n1) ssh\n2) sftp"
+read -n1 arg
+case $arg in
+    1) ssh_mode  ;;
+    2) sftp_mode ;;
+esac
