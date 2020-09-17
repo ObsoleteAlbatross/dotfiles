@@ -18,7 +18,13 @@ xset r rate 300 50 &
 # file syncing
 syncthing -no-console -no-browser &
 
+# turn off screen timeout
+xset s off
+# xset s on
+xset -dpms
+# xset +dpms
+
 # wm
 # stack exec -- xmonad --recompile
-# exec xmonad
-exec dwm
+exec xmonad
+# exec dwm

@@ -39,12 +39,11 @@ alias xr='sudo xbps-remove -R'
 alias xq='xbps-query'
 
 # emerge
-alias emerge-install='sudo emerge -a --quiet-build'
-alias emerge-install-unmask='emerge-install --autounmask-continue'
-alias emerge-update-all='sudo emerge -uDU --quiet-build --keep-going --newuse --changed-use --with-bdeps=y @world && sudo haskell-updater && sudo perl-cleaner --all'
-alias emerge-depclean='sudo emerge --update --newuse --deep @world && sudo emerge --depclean'
-alias emerge-remove='sudo emerge -cav'
-alias emerge-force-remove='sudo emerge -C'
+alias emerge='sudo emerge'
+alias emerge-update-all='emerge -uDU --keep-going --newuse --changed-use --with-bdeps=y --deep @world && sudo haskell-updater && sudo perl-cleaner --all'
+alias emerge-depclean='emerge --update --newuse --deep @world && emerge --depclean'
+alias emerge-remove='emerge -c'
+alias emerge-force-remove='emerge -C'
 
 # better default options
 alias speedtest-cli='speedtest-cli --secure --bytes'
