@@ -70,12 +70,12 @@ main = do
         logHook = dynamicLogWithPP xmobarPP
                         {
                         ppOutput = \x -> hPutStrLn xmproc x,
-                        ppCurrent = xmobarColor "#83a598" "" . wrap "[" "]",
-                        ppVisible = xmobarColor "#83a598" "",
-                        ppHidden = xmobarColor "#b8bb26" "" . wrap "*" "",
-                        ppHiddenNoWindows = xmobarColor "#d3869b" "",
-                        ppTitle = xmobarColor "#ebdbb2" "" . shorten 70,
-                        ppSep =  "<fc=#ebdbb2> : </fc>",
+                        ppCurrent = xmobarColor "#82aaff" "" . wrap "[" "]",
+                        ppVisible = xmobarColor "#82aaff" "",
+                        ppHidden = xmobarColor "#e1acff" "" . wrap "*" "",
+                        ppHiddenNoWindows = xmobarColor "#ee5555" "",
+                        ppTitle = xmobarColor "#cccccc" "" . shorten 80,
+                        ppSep =  "<fc=#cccccc> : </fc>",
                         ppUrgent = xmobarColor "cc241d" "" . wrap "!" "!",
                         ppExtras  = [windowCount],
                         ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
@@ -84,7 +84,7 @@ main = do
         -- startupHook        = myStartupHook,
         layoutHook         = myLayoutHook,
         workspaces         = myWorkspaces,
-        borderWidth        = 1,
+        borderWidth        = 2,
         normalBorderColor  = "#665c54",
         focusedBorderColor = "#83a598"
         } `additionalKeysP`   myKeys
@@ -93,8 +93,8 @@ main = do
 -- Keybinds
 myKeys =
     [
-    ("M-C-r", spawn "stack exec -- xmonad --recompile"),
-    ("M-S-r", spawn "stack exec -- xmonad --restart"),
+    ("M-C-r", spawn "xmonad --recompile"),
+    ("M-S-r", spawn "xmonad --restart"),
     ("M-S-q", io exitSuccess),
 
     ("M-S-c",           kill1),
@@ -120,7 +120,7 @@ myKeys =
     ("M-<Down>",        sendMessage (MoveDown 10)),
     ("M-<Right>",       sendMessage (MoveRight 10)),
     ("M-<Left>",        sendMessage (MoveLeft 10)),
-    ("M--Up>",        sendMessage (IncreaseUp 10)),
+    ("M-S-<Up>",          sendMessage (IncreaseUp 10)),
     ("M-S-<Down>",      sendMessage (IncreaseDown 10)),
     ("M-S-<Right>",     sendMessage (IncreaseRight 10)),
     ("M-S-<Left>",      sendMessage (IncreaseLeft 10)),
@@ -139,18 +139,15 @@ myKeys =
     ("M-S-<KP_Multiply>",   increaseLimit),
     ("M-S-<KP_Divide>",     decreaseLimit),
 
-    ("M-h",     sendMessage Shrink),
-    ("M-l",     sendMessage Expand),
+    ("M-C-h",   sendMessage Shrink),
+    ("M-C-l",   sendMessage Expand),
     ("M-C-j",   sendMessage MirrorShrink),
     ("M-C-k",   sendMessage MirrorExpand),
     ("M-S-;",   sendMessage zoomReset),
     ("M-;",     sendMessage ZoomFullToggle),
 
     ("M-<Return>", spawn "st"),
-
-    ("M-S-x", spawn "/home/zoomer/.local/bin/lockscreen"),
-
-    ("M-S-<Return>", spawn "rofi -show run"),
+    ("M-S-<Return>", spawn "dmenu_run"),
 
     -- Volume
     ("<XF86AudioMute>",             spawn "amixer set Master toggle"),
@@ -199,4 +196,4 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts float
 tall       = renamed [Replace "tall"]     $ limitWindows 12 $ smartBorders $ smartSpacingWithEdge 3 $ ResizableTall 1 (3/100) (1/2) []
 grid       = renamed [Replace "grid"]     $ limitWindows 12 $ smartBorders $ smartSpacingWithEdge 3 $ mkToggle (single MIRROR) $ Grid (16/10)
 monocle    = renamed [Replace "monocle"]  $ limitWindows 20 $ Full
-floats     = renamed [Replace "floats"]   $ limitWindows 20 $ simplestFloat<
+floats     = renamed [Replace "floats"]   $ limitWindows 20 $ simplestFloat

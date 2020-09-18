@@ -6,6 +6,7 @@ set termguicolors
 set autoindent smartindent
 
 set colorcolumn=81
+" set cursorline
 highlight ColorColumn ctermbg=0 guibg=lightgrey
 
 set mouse=a

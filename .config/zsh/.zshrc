@@ -1,5 +1,4 @@
 export FPATH=$FPATH:$HOME/.config/zsh/plugins:$HOME/.config/zsh/plugins/zsh-completions/src
-source "/usr/share/fzf/key-bindings.zsh"
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow'
 
 export PF_INFO="ascii title os kernel wm pkgs editor shell"
@@ -28,7 +27,8 @@ bindkey -M menuselect 'k' vi-up-line-or-history
 bindkey -M menuselect 'l' vi-forward-char
 bindkey -M menuselect 'j' vi-down-line-or-history
 
-source "$HOME/.config/aliasrc"
-source "$HOME/.config/zsh/plugins/fsh/fast-syntax-highlighting.plugin.zsh"
-
 PS1=" > "
+precmd () {print -Pn "\e]0;%n@%m: %~\a"}
+
+source "$HOME/.config/zsh/plugins/fsh/fast-syntax-highlighting.plugin.zsh"
+source "$HOME/.config/aliasrc"

@@ -1,11 +1,11 @@
-Config { font = "xft:Hack:pixelsize=10:antialias=true:hinting=true,
-                     Source Han Sans KR:pixelsize=11:antialias=true:hinting=true,
-                     Source Han Sans JP:pixelsize=11:antialias=true:hinting=true,
-                     Source Han Sans TW:pixelsize=11:antialias=true:hinting=true,
-                     Source Han Sans HK:pixelsize=11:antialias=true:hinting=true,
-                     Source Han Sans CN:pixelsize=11:antialias=true:hinting=true"
+Config { font = "xft:Hack:pixelsize=14:antialias=true:hinting=true,
+                     Source Han Sans KR:pixelsize=13:antialias=true:hinting=true,
+                     Source Han Sans JP:pixelsize=13:antialias=true:hinting=true,
+                     Source Han Sans TW:pixelsize=13:antialias=true:hinting=true,
+                     Source Han Sans HK:pixelsize=13:antialias=true:hinting=true,
+                     Source Han Sans CN:pixelsize=13:antialias=true:hinting=true"
        , bgColor = "#1d2021"
-       , fgColor = "#ebdbb2"
+       , fgColor = "#bbbbbb"
        , position = Top
        , textOffset = -8
        , lowerOnStart = True
@@ -13,15 +13,15 @@ Config { font = "xft:Hack:pixelsize=10:antialias=true:hinting=true,
        , hideOnStart = False
        , commands = [
                       Run UnsafeStdinReader
-                    , Run Com "/home/zoomer/.local/bin/xmobar_modules/xmobar_battery" [] "battery" 10
-                    , Run Com "/home/zoomer/.local/bin/xmobar_modules/xmobar_cpu" [] "cpu" 10
-                    , Run Com "/home/zoomer/.local/bin/xmobar_modules/xmobar_memory" [] "memory" 10
-                    , Run Com "/home/zoomer/.local/bin/xmobar_modules/xmobar_date" [] "date" 10
-                    , Run Com "/home/zoomer/.local/bin/xmobar_modules/xmobar_net" [] "network" 10
-                    , Run Com "/home/zoomer/.local/bin/xmobar_modules/xmobar_alsa_master" [] "alsa_master" 10
-                    , Run Com "/home/zoomer/.local/bin/xmobar_modules/xmobar_alsa_capture" [] "alsa_capture" 10
+                    , Run Date "%a %d/%m/%y (%H:%M)" "date" 50
+                    , Run DynNetwork ["-t", "down <rx>kb  up <tx>kb"] 10
+                    , Run MultiCpu ["-t", "cpu (<total>%)"] 10
+                    , Run Memory ["-t", "mem <used>mb (<usedratio>%)"] 10
+                    , Run DiskU [("/", "hdd <free> free")] [] 100
+                    , Run BatteryP ["BAT0"] ["-t", "bat <watts> (<left>%)"] 10
+                    , Run Alsa "default" "Master" []
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%UnsafeStdinReader% } %date% { %network% %cpu% %memory% %alsa_capture% %alsa_master% %battery%"
+       , template = "%UnsafeStdinReader%}{ <fc=#8be9fd></fc><fc=#b3afc2>%dynnetwork%</fc>  <fc=#ffb86c>%multicpu%</fc>  <fc=#ff5555>%memory%</fc>  <fc=#82aaff>%disku%</fc>  <fc=#c3e88d>%battery%</fc>  <fc=#e1acff>%date%</fc> "
        }
