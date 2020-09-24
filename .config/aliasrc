@@ -41,7 +41,7 @@ alias xq='xbps-query'
 
 # emerge
 alias emerge='sudo emerge'
-alias emerge-update-all='emerge -uDU --keep-going --newuse --changed-use --with-bdeps=y --deep @world && sudo haskell-updater && sudo perl-cleaner --all'
+alias emerge-update-all='emerge -uDU --keep-going --newuse --changed-use --with-bdeps=y --deep @world && sudo haskell-updater && sudo perl-cleaner --all && emerge --depclean'
 alias emerge-depclean='emerge --update --newuse --deep @world && emerge --depclean'
 alias emerge-remove='emerge -c'
 alias emerge-force-remove='emerge -C'
