@@ -17,7 +17,8 @@ alias .3='cd ../../..'
 alias .4='cd ../../../..'
 alias .5='cd ../../../../..'
 # change ls to exa
-alias ls='exa -al --color=always --group-directories-first'
+alias ls='exa -l --color=always --group-directories-first'
+alias la='exa -al --color=always --group-directories-first'
 alias lt='exa -aT --color=always --group-directories-first'
 alias l.='exa -a | grep "^\."'
 
