@@ -5,9 +5,13 @@ filetype indent on
 set termguicolors
 set autoindent smartindent
 
+set updatetime=50
+set guioptions=
+
+set signcolumn=yes
 set colorcolumn=81
-" set cursorline
 highlight ColorColumn ctermbg=0 guibg=lightgrey
+set cmdheight=2
 
 set mouse=a
 set scrolloff=8
@@ -43,7 +47,6 @@ set t_vb=
 set tm=500
 set wildmenu
 set wildmode=longest,list,full
-set nowrap
 set nowritebackup
 
 " === binds ===
@@ -55,6 +58,7 @@ map <leader>o :setlocal spell! spelllang=en_us<CR>
 
 " remove highlight
 nnoremap <silent> <CR> :noh<CR><CR>
+nnoremap <silent> <Esc> :noh<CR>
 
 " regex sub
 nnoremap S :%s//g<Left><Left>
@@ -101,22 +105,17 @@ autocmd InsertEnter * norm zz
 " compile suckless
 autocmd BufWritePost config.h,config.def.h !rm config.h; make clean install
 
-" == ale ==
-let g:ale_disable_lsp=1 " needed before ale is loaded and to work with coc
-let g:ale_lint_on_enter=1
-let g:ale_lint_on_text_changed='never'
-let g:ale_lint_on_save=1
-let g:ale_sign_column_always=1
-let g:ale_set_highlights=0
-let g:ale_echo_msg_error_str='error'
-let g:ale_echo_msg_warning_str='warning'
-let g:ale_echo_msg_format='[%linter%] %s [%severity%]'
-nmap <silent> <C-e> <Plug>(ale_next_wrap)
+" == au ==
+augroup highlight_yank
+    autocmd!
+    autocmd TextYankPost * silent! lua require'vim.highlight'.on_yank({timeout = 100})
+augroup END
 
-" == plugged ==
+" == plugins ==
 " download vim-plug if missing
 if empty(glob("~/.local/share/nvim/site/autoload/plug.vim"))
-  silent! execute '!sh -c curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs
+  silent! execute '!sh -c curl -fLo
+              \ "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs
               \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
   autocmd VimEnter * silent! PlugInstall
 endif
@@ -125,42 +124,71 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'                         " fzf
 Plug 'junegunn/goyo.vim'                        " center text
-Plug 'neoclide/coc.nvim', {'branch': 'release'} " code completion
-Plug 'kevinoid/vim-jsonc'                       " jsonc for coc-settings
 Plug 'itchyny/lightline.vim'                    " power line but light
 Plug 'ap/vim-css-color'                         " color highlighting
-Plug 'gruvbox-community/gruvbox'
-Plug 'vimwiki/vimwiki'                          " vimwiki
+Plug 'gruvbox-community/gruvbox'                " gruvbox
 Plug 'unblevable/quick-scope'                   " faster horizontal find
-Plug 'sheerun/vim-polyglot'                     " language packs
-Plug 'airblade/vim-rooter'                      " change working dir to root
 Plug 'mbbill/undotree'                          " vim undo tree visualiser
-Plug 'dense-analysis/ale'                       " async lint engine
-Plug 'maximbaz/lightline-ale'                   " ale warnings in lightline
 Plug 'majutsushi/tagbar'                        " tagbar
-Plug 'jackguo380/vim-lsp-cxx-highlight'         " semantic c hl
+Plug 'neovim/nvim-lspconfig'                    " lsp
+Plug 'nvim-lua/completion-nvim'                 " autocomplete
+Plug 'nvim-lua/diagnostic-nvim'                 " diagnostics
+Plug 'sheerun/vim-polyglot'                     " language packs
+Plug 'SirVer/ultisnips'                         " snips
+Plug 'honza/vim-snippets'                       " snips
 call plug#end()
 
-" === vimwiki ===
-let g:vimwiki_table_mappings=0
-let g:vimwiki_conceallevel=2
-let g:vimwiki_list=[{'path': '$HOME/notes/vimwiki'}]
-function! VimwikiLinkHandler(link)
-  let link=a:link
-  if link =~# '^vfile:'
-    let link=link[1:]
-  else
-    return 0
-  endif
-  let link_infos=vimwiki#base#resolve_link(link)
-  if link_infos.filename == ''
-    echomsg 'Unresolved link'
-    return 0
-  else
-    exe 'vs ' . fnameescape(link_infos.filename)
-    return 1
-  endif
-endfunction
+" === gruvbox ===
+let g:gruvbox_italic=1
+let g:gruvbox_contrast_dark='hard'
+if exists('+termguicolors')
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
+let g:gruvbox_invert_selection='0'
+colorscheme gruvbox
+
+" == lsp ==
+lua << EOF
+local on_attach_vim = function(client)
+  require'completion'.on_attach(client)
+  require'diagnostic'.on_attach(client)
+end
+require'nvim_lsp'.tsserver.setup{on_attach=on_attach_vim}
+require'nvim_lsp'.ccls.setup{on_attach=on_attach_vim}
+require'nvim_lsp'.vimls.setup{on_attach=on_attach_vim}
+require'nvim_lsp'.jdtls.setup{on_attach=on_attach_vim}
+EOF
+
+" == complete ==
+set completeopt=menuone,noinsert,noselect
+set shortmess+=c
+let g:completion_timer_cycle = 50
+let g:completion_trigger_on_delete = 1
+let g:completion_matching_strategy_list = [ 'exact', 'substring', 'fuzzy' ]
+
+" == diagnostic ==
+let g:diagnostic_enable_underline = 0
+let g:diagnostic_enable_virtual_text = 1
+map <leader>k :PrevDiagnosticCycle<CR>
+map <leader>j :NextDiagnosticCycle<CR>
+map <leader>d :OpenDiagnostic<CR>
+
+" == vim go (polyglot) ==
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_types = 1
+let g:go_highlight_function_parameters = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_generate_tags = 1
+let g:go_highlight_format_strings = 1
+let g:go_highlight_variable_declarations = 1
+let g:go_auto_sameids = 1
 
 " == netrw ==
 let g:netrw_banner=0
@@ -225,11 +253,6 @@ autocmd WinEnter * if winnr('$') == 1
 
 let g:NetrwIsOpen=0
 
-" === gruvbox ===
-let g:gruvbox_italic=1
-let g:gruvbox_contrast_dark='hard'
-colorscheme gruvbox
-
 " === goyo ===
 map <leader>g :Goyo <cr>
 
@@ -238,28 +261,6 @@ map <leader>g :Goyo <cr>
 set laststatus=2
 set noshowmode
 let g:lightline={ 'colorscheme': 'gruvbox' }
-let g:lightline.component_expand={
-      \  'linter_checking': 'lightline#ale#checking',
-      \  'linter_infos': 'lightline#ale#infos',
-      \  'linter_warnings': 'lightline#ale#warnings',
-      \  'linter_errors': 'lightline#ale#errors',
-      \  'linter_ok': 'lightline#ale#ok',
-      \ }
-let g:lightline.component_type={
-      \     'linter_checking': 'right',
-      \     'linter_infos': 'right',
-      \     'linter_warnings': 'warning',
-      \     'linter_errors': 'error',
-      \     'linter_ok': 'right',
-      \ }
-let g:lightline.active={
-            \ 'left': [ [ 'mode', 'paste' ],
-            \           [ 'readonly', 'filename', 'modified' ] ],
-            \ 'right': [ [ 'linter_checking', 'linter_errors',
-            \              'linter_warnings', 'linter_infos', 'linter_ok' ],
-            \            [ 'lineinfo', 'percent' ],
-            \            [ 'fileformat', 'fileencoding', 'filetype' ] ] }
-
 
 " === quick scope ===
 " trigger a highlight in the appropriate direction when pressing these keys:
@@ -292,82 +293,6 @@ endfunction
 command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 autocmd! FileType fzf set laststatus=0 noshowmode noruler
             \ | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
-
-" === coc ===
-" extensions list
-let g:coc_global_extensions =
-            \ [ 'coc-clangd', 'coc-cmake', 'coc-css', 'coc-cssmodules', 'coc-dictionary',
-            \   'coc-json', 'coc-format-json', 'coc-marketplace', 'coc-pairs', 'coc-go',
-            \   'coc-html', 'coc-java', 'coc-lua', 'coc-phpls', 'coc-prettier', 'coc-python',
-            \   'coc-rls', 'coc-sh', 'coc-sh', 'coc-syntax', 'coc-vimtex', 'coc-tag',
-            \   'coc-vimlsp', 'coc-word', 'coc-zi']
-set cmdheight=2
-set updatetime=50
-if has("patch-8.1.1564")
-    set signcolumn=number
-else
-    set signcolumn=yes
-endif
-
-" use <tab> for trigger completion and navigate to the next complete item
-function! s:check_back_space() abort
-  let col=col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
-
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable()?
-      \ "\<C-r>=coc#rpc#request('doKeymap',['snippets-expand-jump', ''])\<CR>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
-
-let g:coc_snippet_next='<tab>'
-
-" use <c-space>for trigger completion
-inoremap <silent><expr> <c-space> coc#refresh()
-" Use <Tab> and <S-Tab> to nav completion list
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-" use <cr> to confirm completion
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" <cr> confirm completion when none is selected
-" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() :
-"             \ "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-" close preview window when completion done
-autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif
-
-" coc jump to def
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gt <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" coc format
-" <leader>f moved to netrw toggle
-" map <leader>f :Format<CR>
-
-" coc show documentation
-nnoremap <silent> <leader>d :call <SID>show_documentation()<CR>
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  else
-    call CocAction('doHover')
-  endif
-endfunction
-
-" coc symbol rename
-nmap <leader>rn <Plug>(coc-rename)
-
-imap <C-l> <Plug>(coc-snippets-expand)
-vmap <C-j> <Plug>(coc-snippets-select)
-let g:coc_snippet_next='<c-j>'
-let g:coc_snippet_prev='<c-k>'
-imap <C-j> <Plug>(coc-snippets-expand-jump)
-
-command! -nargs=0 Format :call CocAction('format')
 
 " === misc ===
 " clear color of sign gutter
