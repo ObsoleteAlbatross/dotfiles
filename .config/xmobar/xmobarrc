@@ -17,11 +17,10 @@ Config { font = "xft:Hack:pixelsize=14:antialias=true:hinting=true,
                     , Run DynNetwork ["-t", "down <rx>kb  up <tx>kb"] 10
                     , Run MultiCpu ["-t", "cpu (<total>%)"] 10
                     , Run Memory ["-t", "mem <used>mb (<usedratio>%)"] 10
-                    , Run DiskU [("/", "hdd <free> free")] [] 100
                     , Run BatteryP ["BAT0"] ["-t", "bat <watts> (<left>%)"] 10
                     , Run Alsa "default" "Master" []
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = "%UnsafeStdinReader%}{ <fc=#8be9fd></fc><fc=#b3afc2>%dynnetwork%</fc>  <fc=#ffb86c>%multicpu%</fc>  <fc=#ff5555>%memory%</fc>  <fc=#82aaff>%disku%</fc>  <fc=#c3e88d>%battery%</fc>  <fc=#e1acff>%date%</fc> "
+       , template = "%UnsafeStdinReader%}{ <fc=#8be9fd></fc><fc=#b3afc2>%dynnetwork%</fc>  <fc=#ffb86c>%multicpu%</fc>  <fc=#ff5555>%memory%</fc>  <fc=#c3e88d>%battery%</fc>  <fc=#e1acff>%date%</fc> "
        }
