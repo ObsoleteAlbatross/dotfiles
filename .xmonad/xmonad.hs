@@ -120,7 +120,7 @@ myKeys =
     ("M-<Down>",        sendMessage (MoveDown 10)),
     ("M-<Right>",       sendMessage (MoveRight 10)),
     ("M-<Left>",        sendMessage (MoveLeft 10)),
-    ("M-S-<Up>",          sendMessage (IncreaseUp 10)),
+    ("M-S-<Up>",        sendMessage (IncreaseUp 10)),
     ("M-S-<Down>",      sendMessage (IncreaseDown 10)),
     ("M-S-<Right>",     sendMessage (IncreaseRight 10)),
     ("M-S-<Left>",      sendMessage (IncreaseLeft 10)),

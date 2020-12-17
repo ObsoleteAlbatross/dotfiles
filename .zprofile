@@ -1,4 +1,5 @@
 export PATH="$PATH:$(du "$HOME/.local/bin/" | cut -f2 | paste -sd ':')"
+export PATH="$PATH:$(du "$HOME/src/idea-IC-202.7660.26/bin" | cut -f2 | paste -sd ':')"
 export XCURSOR_PATH="$XCURSOR_PATH:$HOME/.local/share/icons"
 
 # Default programs:

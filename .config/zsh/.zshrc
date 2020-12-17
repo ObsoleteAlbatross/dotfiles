@@ -1,7 +1,7 @@
 export FPATH=$FPATH:$HOME/.config/zsh/plugins:$HOME/.config/zsh/plugins/zsh-completions/src
 export FZF_DEFAULT_COMMAND='rg --files --hidden --follow'
 
-export PF_INFO="ascii title os kernel wm pkgs editor shell"
+# export PF_INFO="ascii title os kernel wm pkgs editor shell"
 # pfetch
 "$HOME"/src/ufetch/ufetch-gentoo
 
@@ -10,8 +10,8 @@ stty stop undef
 
 # command history
 HISTFILE=~/.cache/shell_history
-HISTISZE=10000
-SAVEHIST=10000
+HISTISZE=100000
+SAVEHIST=100000
 
 unsetopt beep
 autoload -U compinit

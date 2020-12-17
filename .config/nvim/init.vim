@@ -8,6 +8,7 @@ set autoindent smartindent
 set updatetime=50
 set guioptions=
 
+
 set signcolumn=yes
 set colorcolumn=81
 highlight ColorColumn ctermbg=0 guibg=lightgrey
@@ -49,7 +50,7 @@ set wildmenu
 set wildmode=longest,list,full
 set nowritebackup
 
-" === binds ===
+" === keybinds ===
 " leader
 let mapleader=" "
 
@@ -83,6 +84,7 @@ nmap <silent> <leader>t :TagbarToggle<CR>
 
 " open corresponding C++ header/source file in split
 map <silent> <leader>h :w <bar> :e %:p:s,.h$,.X123X,:s,.cpp$,.h,:s,.X123X$,.cpp,<CR>
+map <silent> <leader>H :w <bar> :e %:p:s,.h$,.X123X,:s,.c$,.h,:s,.X123X$,.c,<CR>
 
 " compile vimwiki to pdf
 map <silent> <leader>c :!vimwiki-compile %<CR>
@@ -90,6 +92,9 @@ map <silent> <leader>v :!vimwiki-open %<CR>
 
 " toggle conceal level between 0 and 2
 nnoremap <leader>z :let &cole=(&cole == 2) ? 0 : 2 <bar> echo 'conceallevel ' . &cole <CR>
+
+" DP :))))
+vnoremap <leader>p "_dP
 
 " === auto ===
 " on save remove trailing whitespace and newlines
@@ -103,7 +108,7 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 autocmd InsertEnter * norm zz
 
 " compile suckless
-autocmd BufWritePost config.h,config.def.h !rm config.h; make clean install
+autocmd BufWritePost config.h,config.def.h !rm config.h; make install
 
 " == au ==
 augroup highlight_yank
@@ -132,10 +137,12 @@ Plug 'mbbill/undotree'                          " vim undo tree visualiser
 Plug 'majutsushi/tagbar'                        " tagbar
 Plug 'neovim/nvim-lspconfig'                    " lsp
 Plug 'nvim-lua/completion-nvim'                 " autocomplete
-Plug 'nvim-lua/diagnostic-nvim'                 " diagnostics
+" Plug 'nvim-lua/diagnostic-nvim'                 " diagnostics
 Plug 'sheerun/vim-polyglot'                     " language packs
-Plug 'SirVer/ultisnips'                         " snips
-Plug 'honza/vim-snippets'                       " snips
+" Plug 'octol/vim-cpp-enhanced-highlight'         " cpp hl
+Plug 'SirVer/ultisnips'                         " snippet engine
+Plug 'honza/vim-snippets'                       " snippets
+Plug 'miyakogi/seiya.vim'
 call plug#end()
 
 " === gruvbox ===
@@ -148,31 +155,53 @@ endif
 let g:gruvbox_invert_selection='0'
 colorscheme gruvbox
 
+" == diagnostic == (deprecated)
+" lua << EOF
+" local on_attach_vim = function(client)
+"   require'completion'.on_attach(client)
+"   require'diagnostic'.on_attach(client)
+" end
+" require'nvim_lsp'.tsserver.setup{on_attach=on_attach_vim}
+" require'nvim_lsp'.ccls.setup{on_attach=on_attach_vim}
+" require'nvim_lsp'.vimls.setup{on_attach=on_attach_vim}
+" require'nvim_lsp'.jdtls.setup{on_attach=on_attach_vim}
+" EOF
+" let g:diagnostic_enable_underline = 0
+" let g:diagnostic_enable_virtual_text = 1
+" map <leader>k :PrevDiagnosticCycle<CR>
+" map <leader>j :NextDiagnosticCycle<CR>
+" map <leader>d :OpenDiagnostic<CR>
+
 " == lsp ==
+map <leader>k <cmd>lua vim.lsp.diagnostic.goto_prev()<CR>
+map <leader>j <cmd>lua vim.lsp.diagnostic.goto_next()<CR>
+map <leader>d <cmd>lua vim.lsp.diagnostic.set_loclist()<CR>
 lua << EOF
-local on_attach_vim = function(client)
-  require'completion'.on_attach(client)
-  require'diagnostic'.on_attach(client)
-end
-require'nvim_lsp'.tsserver.setup{on_attach=on_attach_vim}
-require'nvim_lsp'.ccls.setup{on_attach=on_attach_vim}
-require'nvim_lsp'.vimls.setup{on_attach=on_attach_vim}
-require'nvim_lsp'.jdtls.setup{on_attach=on_attach_vim}
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+  vim.lsp.diagnostic.on_publish_diagnostics, {
+    virtual_text = true,
+    underline = false,
+    signs = true,
+    update_in_insert = false,
+  }
+)
 EOF
 
+
 " == complete ==
+lua require'nvim_lsp'.ccls.setup{on_attach=require'completion'.on_attach}
+lua require'nvim_lsp'.vimls.setup{on_attach=require'completion'.on_attach}
 set completeopt=menuone,noinsert,noselect
 set shortmess+=c
 let g:completion_timer_cycle = 50
 let g:completion_trigger_on_delete = 1
 let g:completion_matching_strategy_list = [ 'exact', 'substring', 'fuzzy' ]
+let g:completion_enable_snippet = 'UltiSnips'
 
-" == diagnostic ==
-let g:diagnostic_enable_underline = 0
-let g:diagnostic_enable_virtual_text = 1
-map <leader>k :PrevDiagnosticCycle<CR>
-map <leader>j :NextDiagnosticCycle<CR>
-map <leader>d :OpenDiagnostic<CR>
+" == snippets ==
+let g:UltiSnipsExpandTrigger = "<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
 " == vim go (polyglot) ==
 let g:go_highlight_build_constraints = 1
@@ -294,6 +323,15 @@ command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 autocmd! FileType fzf set laststatus=0 noshowmode noruler
             \ | autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
-" === misc ===
-" clear color of sign gutter
-highlight clear SignColumn
+" === cpp enhanced highlight ===
+" let g:cpp_class_scope_highlight = 1
+" let g:cpp_member_variable_highlight = 1
+" let g:cpp_class_decl_highlight = 1
+let g:cpp_posix_standard = 1
+" let g:cpp_experimental_template_highlight = 1
+" let g:cpp_concepts_highlight = 1
+let g:cpp_no_function_highlight = 1
+
+" === seiya ===
+" let g:seiya_auto_enable=1
+" let g:seiya_target_groups = has('nvim') ? ['guibg'] : ['ctermbg']
